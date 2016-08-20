@@ -41,9 +41,9 @@ public class BaseTestDriver extends ProcessPropertyFile {
 		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
 		extentReports.flush();
 		System.out.println("after suite");
-//		if(driver!=null){
-//			driver.quit();
-//		}
+		if(driver!=null){
+			driver.quit();
+		}
 	}
 
 	public String getBrowserFromProperty(){
@@ -67,6 +67,11 @@ public class BaseTestDriver extends ProcessPropertyFile {
 		}
 		return driver;
 
+	}
+	
+	
+	public String getBrowserType(){
+		return browser;
 	}
 
 }
