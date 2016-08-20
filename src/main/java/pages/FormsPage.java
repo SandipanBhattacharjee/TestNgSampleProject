@@ -2,8 +2,10 @@ package pages;
 
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -36,12 +38,18 @@ public class FormsPage {
 	
 	@FindBy(id="name_3_lastname")
 	WebElement lastName;
-	
-	@FindBy(xpath="//input[@value='married']")
-	WebElement martialStatus;
+
 	
 	@FindBy(xpath="//input[@value='cricket ']")
-	WebElement hobby;
+	WebElement hobbyCricket;
+	
+	@FindBy(xpath="//input[@value='dance']")
+	WebElement hobbyDance;
+	
+	@FindBy(xpath="//input[@value='reading']")
+	WebElement hobbyReading;
+	
+	
 	
 	@FindBy(id="dropdown_7")
 	WebElement countrySelect;
@@ -71,19 +79,24 @@ public class FormsPage {
 		basePage.validatePageTitle(pageTitle, driver.getTitle());
 		
 	}
-
-	public void fillInFormAndSave() {
-		firstName.sendKeys("Sandipan");
-		lastName.sendKeys("Bhatta");
-		martialStatus.click();
-		hobby.click();
+	
+	public void fillInFormAndSave(Map<String, String> formDataMap) {
+		fillDataInTextField(firstName, formDataMap.get("firstName"));
+		fillDataInTextField(lastName, formDataMap.get("lastName"));
+		
+		driver.findElement(By.xpath("//input[@value='"+formDataMap.get("martialStatus")+"']")).click(); //married radio button.
+		
+		clickOnRequiredCheckbox(formDataMap.get("hobby")); // processing the checkbox
+		
 		Select countryDropdown=new Select(countrySelect);
-		countryDropdown.selectByValue("India");
-		phone.sendKeys("6184130226");
-		userName.sendKeys("Sandy");
-		email.sendKeys("sandy@gmail.com");
-		password.sendKeys("joy123");
-		confirmPassword.sendKeys("joy123");
+		countryDropdown.selectByValue(formDataMap.get("country")); //country dropdown
+		
+		fillDataInTextField(phone, formDataMap.get("phone"));
+		fillDataInTextField(userName, formDataMap.get("username"));
+		fillDataInTextField(email,formDataMap.get("email"));
+		fillDataInTextField(password,formDataMap.get("password"));
+		fillDataInTextField(confirmPassword, formDataMap.get("confPassword"));
+		
 	}
 
 	public void uploadImage() {
@@ -92,6 +105,7 @@ public class FormsPage {
 			imageUpload.click();
 			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 			System.out.println(cmd);
+			//driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -104,5 +118,35 @@ public class FormsPage {
 		
 	}
 	
+	private void fillDataInTextField(WebElement element, String text){
+		element.clear();
+		element.sendKeys(text);
+	}
+	
+	private void uncheckCheckBoxIfAlreadyChecked(WebElement element){
+		if(element.isSelected()){
+			element.click();
+		}
+	}
+	
+	private void executePreconditon(){
+		uncheckCheckBoxIfAlreadyChecked(hobbyCricket);
+		uncheckCheckBoxIfAlreadyChecked(hobbyDance);
+		uncheckCheckBoxIfAlreadyChecked(hobbyReading);
+	}
+	
+	private void clickOnRequiredCheckbox(String choice){
+		if(choice.contains("reading")){
+			executePreconditon();
+			hobbyReading.click();		
+		}else if(choice.contains("dance")){
+			executePreconditon();
+			hobbyDance.click();	
+		}else{
+			executePreconditon();
+			hobbyCricket.click();	
+		}
+		
+	}
 	
 }

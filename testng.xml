@@ -10,13 +10,13 @@
 					<include name="uploadImageAndSubmitDataTest" />
 				</methods>
 			</class>
-			<class name="testdrivers.ActitimeProcessingTest">
+			<!-- <class name="testdrivers.ActitimeProcessingTest">
 				<methods>
 					<include name="loginToActitime" />
 					<include name="validateLoggedInUser" />
 					<include name="logUsersFromThePage" />
 				</methods>
-			</class>
+			</class> -->
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
